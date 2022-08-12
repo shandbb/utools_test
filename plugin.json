@@ -1,0 +1,37 @@
+{
+	"pluginName": "DNS快速切换🚀",
+  "description": "快速切换DNS，清楚DNS缓存",
+  "author": "mufengs",
+  "homepage": "https://blog.mufengs.com",
+  "preload":"preload.js",
+  "logo": "logo.png",
+  "platform": ["darwin","win32"],
+	"version": "1.0.3",
+	"features": [
+    {
+		  "code": "getdns",
+		  "explain": "获取当前DNS",
+			"cmds":["getdns", "获取当前DNS"]
+    },
+		{
+		  "code": "definedns",
+		  "explain": "自定义DNS",
+			"cmds":["definedns", "自定义DNS"]
+    },
+		{
+		  "code": "dnssetting",
+		  "explain": "切换ipv4/ipv6 Dns,重新设置网卡",
+			"cmds":["dnssetting", "切换ipv4/ipv6DNS,重新设置网卡"]
+    },
+    {
+		  "code": "changedns",
+		  "explain": "切换DNS",
+			"cmds":["changedns", "切换DNS"]
+    },
+    {
+		  "code": "cleandns",
+		  "explain": "清除DNS",
+			"cmds":["cleandns", "清除DNS"]
+		}
+	]
+}
