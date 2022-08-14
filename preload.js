@@ -4,47 +4,6 @@ const {pingMacSpeed,pingWinSpeed} =require("./ping.js");
 const {setMacDns,setWinDns} =require("./setDns.js");
 
 
-
-
-
-function getDeivice() {
-
-  if (utools.isMacOs()) {
-    //获取当前网络设备
-    var cmdStr = 'networksetup -listallnetworkservices|grep -v "network servic" |while read -r lines;do echo $lines; done;'
-    exec(cmdStr, (err, stdout, stderr) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      x = []
-      stdout = stdout.split("\n");
-      console.log(stdout);
-      for (var i = 0; i < stdout.length - 1; i++) {
-        console.log(stdout[i]);
-        x.push(stdout[i])
-      }
-
-      utools.dbStorage.setItem("device", x)
-
-    })
-  }
-  if (utools.isWindows()) {
-    console.log('*****网卡信息*******');
-
-    const networksObj = os.networkInterfaces();
-    utools.dbStorage.setItem("device", Object.keys(networksObj))
-  }
-
-
-}
-
-
-
-
-
-
-
 window.exports = {
   "getdns": { // 注意：键对应的是plugin.json中的features.code
     mode: "none", // 用于无需UI显示，执行一些简单的代码
@@ -122,6 +81,12 @@ window.exports = {
           obj.title =  utools.dbStorage.getItem("denfinedns")[i]
           default_set.push(obj)
         }
+        // let map =new Map();
+        // console.log(default_set)
+        // for (let item of this.default_set){
+        //   map.set(item.id,item)
+        // }
+        // this.default_set=[...map.values()];
       }
         callbackSetList(default_set)
       },
@@ -203,7 +168,7 @@ window.exports = {
       placeholder: "搜索"
     }
   },
-  "dnssetting": { // 注意：键对应的是plugin.json中的features.code
+  "DNS_CONFIG": { // 注意：键对应的是plugin.json中的features.code
     mode: "list", // 用于无需UI显示，执行一些简单的代码
     args: {
       // 进入插件时调用（可选）
@@ -223,6 +188,11 @@ window.exports = {
           description: '重新设置网卡',
           icon: '', // 图标(可选)
           type: 'dns_card'
+        }, {
+          title: '恢复初始化',
+          description: '恢复初始化',
+          icon: '', // 图标(可选)
+          type: 'rebuild'
         }])
       },
       // 子输入框内容变化时被调用 可选 (未设置则无搜索)
@@ -231,6 +201,13 @@ window.exports = {
       },
       // 用户选择列表中某个条目时被调用
       select: (action, itemData, callbackSetList) => {
+        if(itemData.type == "rebuild"){
+          utools.dbStorage.removeItem("dns_type");
+          utools.dbStorage.removeItem("device")
+          utools.dbStorage.removeItem("select_device")
+          window.utools.showNotification("dns已恢复初始化，请前往DNS_SET进行相应配置")
+          window.utools.hideMainWindow()
+        }
 
         if (itemData.type == "dns_type") {
           dns_type = (utools.dbStorage.getItem('dns_type') == null || utools.dbStorage.getItem('dns_type') == 'ipv6') ? 'ipv4' : 'ipv6'
@@ -279,7 +256,7 @@ window.exports = {
               }else{
                 utools.dbStorage.setItem('select_device', itemData.title);
               }     
-              window.utools.showNotification("网卡选择成功,重新进入选择")
+              window.utools.showNotification("选择成功")
           }
           if (utools.isWindows()) {
             console.log('*****网卡信息*******');
@@ -292,11 +269,18 @@ window.exports = {
 
             for (var i = 0; i < Object.keys(networksObj).length; i++) {
               var obj = {}
-              obj.title = dlist[i]
+              obj.title =  Object.keys(networksObj)[i]
               listd.push(obj)
               // window.utools.showNotification(listd)
             }
             callbackSetList(listd)
+            utools.dbStorage.setItem('select_device', "");
+            if ( itemData.title.indexOf(":")>0){
+              utools.dbStorage.setItem('select_device', itemData.title.split(":")[1]);
+            }else{
+              utools.dbStorage.setItem('select_device', itemData.title);
+            }     
+            window.utools.showNotification("选择成功")
           }
         }
       },
@@ -405,21 +389,6 @@ window.exports = {
             other: "180.76.76.76",
             ipv6: '2400:da00::6666'
           },
-          // {
-          //   title: 'SDNS',
-          //   description: 'SDNS 1.2.4.8/210.2.4.8 SDNS是由中国互联网络信息中心（CNNIC）与国内外电信运营商合作推出的免费公共云解析服务（SecureDNS，简称SDNS），旨在为用户提供高速、安全、智能的上网接入解析服务。',
-          //   icon: 'res/sdns.png',
-          //   other: "1.2.4.8 210.2.4.8",
-          //   ipv6: ''
-          // },
-          // {
-          //   title: 'DNS派',
-          //   description: 'DNS 派是由 360 出品的免费公众 DNS 解析服务。它可以让网上冲浪更加稳定、快速、安全；为家庭拦截钓鱼网站，过滤非法网站，建立一个绿色健康的网上环境；为域名拼写自动纠错等',
-          //   icon: 'res/dnslogo.png',
-          //   // z: 'https://yuanliao.info',
-          //   other: "101.226.4.6 218.30.118.6",
-          //   ipv6:''
-          // },
           {
             title: '114DNS',
             description: '114DNS',

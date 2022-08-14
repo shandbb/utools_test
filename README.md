@@ -1,4 +1,46 @@
-# Mufengs DNS快速切换🚀
+# DNS快速切换🚀
+
+## 简述
+
+主要功能：
+
+1. 切换DNS
+2. Dnssetting
+3. 清除DNS
+4. 自定义DNS
+5. 获取当前DNS
+
+使用方法：
+
+参考视频：https://www.bilibili.com/video/BV1xB4y167s9?share_source=copy_web&vd_source=7c58cb625f2d2a0866844562e4306589
+
+1.utools插件中心，搜索 "DNS快速切换🚀"
+2.点击安装
+3.呼出utools面板，输入dns，根据自己的需求进行后续操作
+
+注：第一次安装此插件
+
+1. 输入dns，选择dnssetting
+2. 选择ipv4或者ipv6
+3. 重启呼出面板
+4. 输入dns，选择dnssetting
+5. 选择修改网卡配置，选择需要修改dns的网卡
+6. 后续操作同使用方法
+
+====
+
+版本号：3.0.0
+
+1、优化兼容性
+2、修改缓存选择网卡部分代码
+3、代码拆分，方便后期维护
+4、代码放到github，有问题的同学可以提issue
+5、修改dnssetting为DNS_CONFIG
+6、修复window下，dns切换部分代码。
+
+TODO：
+
+1. 修复选择提示弹窗乱弹，window下
 
 ====
 
@@ -8,8 +50,6 @@
 
 1.修复window以及mac的dns设置不成功问题
 2.修复自定义dns功能，并记录设置的dns
-
-
 
 ====
 
@@ -34,7 +74,6 @@ done
 1. dns ~~自动~~ 测速 ~~排序~~
 
 2. 优化操作流程
-
 
 ====
 
